@@ -110,7 +110,9 @@ def depthFirstSearch(problem):
         
 
 def breadthFirstSearch(problem):
+    
     estat = problem.getStartState()
+    print estat
     
     stateQueue = util.Queue()
     
@@ -144,42 +146,43 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     
-    import util, game
-    
-    print "\n"
-    print problem.getStartState()
-    print "\n"
-    
-    
-    
     estat = problem.getStartState()
     
     statePQueue = util.PriorityQueue()
     
     explored = []
     
-    statePQueue.push([estat,[]],util.manhattanDistance(game.Configuration.getPosition,game.Configuration.getPosition))
+    h = heuristic(estat,problem)
+    
+    statePQueue.push([estat,[],0],h)
+    
+    goal = False
     
     while not statePQueue.isEmpty():
     
         actual = statePQueue.pop()
-                                       
-        ################################################################################
-        #                                                                              #
-        # FALTA BUSCAR SOLUCION OPTIMA Y QUE EL AUTOGRADER NO PETE.                    #
-        #                                                                              #
-        ################################################################################
                                       
-        if(problem.isGoalState(actual[0])):
-            goal = actual
-            restant = statePQueue.pop()
-            if(len(actual[1])<len(goal[1]) or len(actual[1])<len(restant[1])):
-                return actual[1]
-            statePQueue.push()
+        if(problem.isGoalState(actual[0]) or goal):
+            goal = True
+            sol_parcial = actual
+            if(not statePQueue.isEmpty()):
+                prova = statePQueue.pop()
+                if(sol_parcial[2]<prova[2]+heuristic(prova[0],problem)):
+                    return sol_parcial[1]
+                else:
+                    prio = prova[2]+heuristic(prova[0],problem)
+                    statePQueue(prova,prio)
+            else:
+                return sol_parcial[1]
+            
         
         if actual[0] not in explored:
+            
             for i in problem.getSuccessors(actual[0]):
-                statePQueue.push([i[0],actual[1]+[i[1]]],util.manhattanDistance(i[0],i[0]) + len(actual[1]+[i[1]]))
+                
+                hact = heuristic(i[0],problem)
+                g = actual[2]+i[2]
+                statePQueue.push([i[0],actual[1]+[i[1]],g],hact+g)
         
         explored.append(actual[0])
         
