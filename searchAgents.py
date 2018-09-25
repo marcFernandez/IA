@@ -295,7 +295,8 @@ class CornersProblem(search.SearchProblem):
         self.cost = 1
         self.cornersVisited = 0
         self.cornersVisitedList = []
-        self.visited = []
+        self._visitedlist = []
+        self._visited = {}
 
     def getStartState(self):
         """
@@ -310,6 +311,7 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+        """
         if(state in self.corners):
             #print("State "+str(state)+" in corners")
             if(state not in self.cornersVisitedList):
@@ -320,8 +322,17 @@ class CornersProblem(search.SearchProblem):
                 return True
             else:
                 return False
-        else:
-            return False
+        return False
+        """
+        if state in self.corners:
+            if state in self.cornersVisitedList:
+                self.cornersVisitedList = []
+                return False
+            else:
+                self.cornersVisitedList.append(state)
+                if(len(self.cornersVisitedList)==4):
+                    return True
+        return False
 
     def getSuccessors(self, state):
         """
@@ -356,6 +367,11 @@ class CornersProblem(search.SearchProblem):
         #print("Successors from state "+str(state)+" are: "+str(successors))
             
         self._expanded += 1 # DO NOT CHANGE
+        
+        if state not in self._visited:
+            self._visited[state] = True
+            self._visitedlist.append(state)
+            
         return successors
 
     def getCostOfActions(self, actions):
