@@ -295,6 +295,7 @@ class CornersProblem(search.SearchProblem):
         self.cost = 1
         self.cornersVisited = 0
         self.cornersVisitedList = []
+        self.visited = []
 
     def getStartState(self):
         """
@@ -315,7 +316,7 @@ class CornersProblem(search.SearchProblem):
                 self.cornersVisitedList.append(state)
                 print(self.cornersVisitedList)
                 self.cornersVisited += 1
-            if(self.cornersVisited==2):
+            if(self.cornersVisited==4):
                 return True
             else:
                 return False
