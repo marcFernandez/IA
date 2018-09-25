@@ -163,19 +163,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         actual = statePQueue.pop()
                                       
         if(problem.isGoalState(actual[0]) or goal):
-            """
-            goal = True
-            sol_parcial = actual
-            if(not statePQueue.isEmpty()):
-                prova = statePQueue.pop()
-                if(sol_parcial[2]<prova[2]+heuristic(prova[0],problem)):
-                    return sol_parcial[1]
-                else:
-                    prio = prova[2]+heuristic(prova[0],problem)
-                    statePQueue(prova,prio)
-            else:
-                return sol_parcial[1]
-            """
             return actual[1]
         
         if actual[0] not in explored:
