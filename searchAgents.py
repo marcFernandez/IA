@@ -281,6 +281,7 @@ class CornersProblem(search.SearchProblem):
         Stores the walls, pacman's starting position and corners.
         """
         self.walls = startingGameState.getWalls()
+        print(self.walls)
         self.startingPosition = startingGameState.getPacmanPosition()
         top, right = self.walls.height-2, self.walls.width-2
         self.corners = ((1,1), (1,top), (right, 1), (right, top))
@@ -291,6 +292,9 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.cost = 1
+        self.cornersVisited = 0
+        self.cornersVisitedList = []
 
     def getStartState(self):
         """
@@ -298,14 +302,25 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startingPosition
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if(state in self.corners):
+            #print("State "+str(state)+" in corners")
+            if(state not in self.cornersVisitedList):
+                self.cornersVisitedList.append(state)
+                print(self.cornersVisitedList)
+                self.cornersVisited += 1
+            if(self.cornersVisited==2):
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def getSuccessors(self, state):
         """
@@ -328,7 +343,17 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
-
+            
+            x,y = state
+            dx,dy = Actions.directionToVector(action)
+            nextx,nexty = int(x+dx),int(y+dy)
+            hitsWall = self.walls[nextx][nexty]
+            if not hitsWall:
+                nextState = (nextx,nexty)
+                successors.append((nextState, action, self.cost))
+            
+        #print("Successors from state "+str(state)+" are: "+str(successors))
+            
         self._expanded += 1 # DO NOT CHANGE
         return successors
 
