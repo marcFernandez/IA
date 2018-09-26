@@ -112,29 +112,45 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     
     estat = problem.getStartState()
-    print(estat)
+#    if type(estat[0])!=tuple:
+#        print(type(estat[0]))
+#        stateQueue = util.Queue()
+#        
+#        stateQueue.push([estat,[]])
+#        
+#        explored = []
+#        
+#        while not stateQueue.isEmpty():
+#            
+#            actual = stateQueue.pop()
+#    
+#            if(problem.isGoalState(actual[0])):
+#                return actual[1]
+#            
+#            if(actual[0] not in explored):
+#                for i in problem.getSuccessors(actual[0]):
+#                    stateQueue.push([i[0],actual[1]+[i[1]]])
+#                    explored.append(actual[0])
+#    else:
     stateQueue = util.Queue()
     
     stateQueue.push([estat,[]])
     
-    explored = []
-    #it = 0
+    visited = []
     
-    while not stateQueue.isEmpty():
+    while stateQueue:
         
-        actual = stateQueue.pop()
-        #print(it)
-        #it += 1
+        actual, actions = stateQueue.pop()
         
-        if(problem.isGoalState(actual[0])):
-            return actual[1]
+        if problem.isGoalState(actual):
+            return actions
         
-        if(actual[0] not in explored):
-            for i in problem.getSuccessors(actual[0]):
-                #print("HENTE SUCCESSORS: "+str(i))
-                stateQueue.push([i[0],actual[1]+[i[1]]])
-                explored.append(actual[0])
-
+        if actual not in visited:
+            print actual
+            for successor in problem.getSuccessors(actual):
+                stateQueue.push([successor[0],actions+[successor[1]]])
+            visited.append(actual)
+                
 def uniformCostSearch(problem):
     
     util.raiseNotDefined()
