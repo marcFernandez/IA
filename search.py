@@ -111,27 +111,13 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     
+#    return ['West', 'West', 'West','South', 'South', 'South', 'South','North','North', 'North', 'North',
+#            'North', 'East', 'East', 'East', 'East', 'East', 'South', 'South','South',
+#            'West', 'West', 'West', 'South', 'South', 'East', 'East', 'East']
     estat = problem.getStartState()
-#    if type(estat[0])!=tuple:
-#        print(type(estat[0]))
-#        stateQueue = util.Queue()
-#        
-#        stateQueue.push([estat,[]])
-#        
-#        explored = []
-#        
-#        while not stateQueue.isEmpty():
-#            
-#            actual = stateQueue.pop()
-#    
-#            if(problem.isGoalState(actual[0])):
-#                return actual[1]
-#            
-#            if(actual[0] not in explored):
-#                for i in problem.getSuccessors(actual[0]):
-#                    stateQueue.push([i[0],actual[1]+[i[1]]])
-#                    explored.append(actual[0])
-#    else:
+    
+    print (estat[0])
+    
     stateQueue = util.Queue()
     
     stateQueue.push([estat,[]])
@@ -141,14 +127,20 @@ def breadthFirstSearch(problem):
     while stateQueue:
         
         actual, actions = stateQueue.pop()
-        
+#        if (1,1) in actual[1]:
+#            print("Actions to (1,1) -----> "+str(actions))
+#            print "------------------------"
         if problem.isGoalState(actual):
+#            print("Actions to the goal:\n"+str(actions))
             return actions
         
         if actual not in visited:
-            print actual
             for successor in problem.getSuccessors(actual):
                 stateQueue.push([successor[0],actions+[successor[1]]])
+                print("Actions han passat de:")
+                print str(actions)
+                print "a:"
+                print str(actions+[successor[1]])
             visited.append(actual)
                 
 def uniformCostSearch(problem):

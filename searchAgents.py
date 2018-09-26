@@ -288,29 +288,16 @@ class CornersProblem(search.SearchProblem):
             if not startingGameState.hasFood(*corner):
                 print 'Warning: no food in corner ' + str(corner)
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
-        # Please add any code here which you would like to use
-        # in initializing the problem
-        "*** YOUR CODE HERE ***"
         self.cost = 1
-        self.cornersVisited = 0
-        self.cornersVisitedList = []
-        self._visitedlist = []
-        self._visited = {}
 
     def getStartState(self):
-        """
-        Returns the start state (in your state space, not the full Pacman state
-        space)
-        """
-        "*** YOUR CODE HERE ***"
+        
         start = (self.startingPosition,[])
         return start
 
     def isGoalState(self, state):
         
-        if len(state[1])==4:
-            return True
-        return False
+        return len(state[1]) == 4
         
     def getSuccessors(self, state):
         
@@ -330,7 +317,8 @@ class CornersProblem(search.SearchProblem):
                 
                 if nextState in self.corners:
                     if nextState not in visitedCorners:
-                        
+#                        print("Appendo l'estat "+str(nextState)+" a successors.")
+#                        print "------------------------------------------------"
                         visitedCorners.append(nextState)
                         
                 successors.append(((nextState,visitedCorners), action, self.cost))
