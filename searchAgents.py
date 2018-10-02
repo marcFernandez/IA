@@ -306,7 +306,10 @@ class CornersProblem(search.SearchProblem):
         Retornem si la llista de corners visitats te 4 elements, ja que com no
         afegirem corners repetits voldra dir que hem arribat al goal        
         """
-        return len(state[1]) == 4
+        goal = False
+        if len(state[1]) == 4 or (len(state[1]) == 3 and state[0] in self.corners and state[0] not in state[1]):
+            goal = True
+        return goal
         
     def getSuccessors(self, state):
         """

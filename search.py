@@ -122,15 +122,6 @@ def breadthFirstSearch(problem):
     while stateQueue:
         
         actual, actions = stateQueue.pop()
-        if actual[0] == (6,1) and len(actual[1]) == 4:
-            print("")
-            print("")
-            print("")
-            print("")
-            print(actions)
-            print("")
-            print("")
-            print("")
         
         if problem.isGoalState(actual):
             print("Actions to the goal:\n"+str(actions))
