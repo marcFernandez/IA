@@ -111,12 +111,7 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     
-#    return ['West', 'West', 'West','South', 'South', 'South', 'South','North','North', 'North', 'North',
-#            'North', 'East', 'East', 'East', 'East', 'East', 'South', 'South','South',
-#            'West', 'West', 'West', 'South', 'South', 'East', 'East', 'East']
     estat = problem.getStartState()
-    
-    print (estat[0])
     
     stateQueue = util.Queue()
     
@@ -127,22 +122,26 @@ def breadthFirstSearch(problem):
     while stateQueue:
         
         actual, actions = stateQueue.pop()
-#        if (1,1) in actual[1]:
-#            print("Actions to (1,1) -----> "+str(actions))
-#            print "------------------------"
+        if actual[0] == (6,1) and len(actual[1]) == 4:
+            print("")
+            print("")
+            print("")
+            print("")
+            print(actions)
+            print("")
+            print("")
+            print("")
+        
         if problem.isGoalState(actual):
-#            print("Actions to the goal:\n"+str(actions))
+            print("Actions to the goal:\n"+str(actions))
             return actions
         
         if actual not in visited:
             for successor in problem.getSuccessors(actual):
                 stateQueue.push([successor[0],actions+[successor[1]]])
-                print("Actions han passat de:")
-                print str(actions)
-                print "a:"
-                print str(actions+[successor[1]])
+                    
             visited.append(actual)
-                
+
 def uniformCostSearch(problem):
     
     util.raiseNotDefined()

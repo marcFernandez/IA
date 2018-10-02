@@ -279,6 +279,7 @@ class CornersProblem(search.SearchProblem):
     def __init__(self, startingGameState):
         """
         Stores the walls, pacman's starting position and corners.
+        Tambe els nodes expandits i el cost de cada moviment
         """
         self.walls = startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition()
@@ -291,17 +292,34 @@ class CornersProblem(search.SearchProblem):
         self.cost = 1
 
     def getStartState(self):
-        
+        """
+        Definim l'estat inicial com una tupla (coordenada,llista) on:
+            - coordenada = (x,y)
+            - llista = []; una llista buida on anirem afegint els corners que
+                            s'han visitat fins arribar a l'estat coordenada
+        """
         start = (self.startingPosition,[])
         return start
 
     def isGoalState(self, state):
-        
+        """
+        Retornem si la llista de corners visitats te 4 elements, ja que com no
+        afegirem corners repetits voldra dir que hem arribat al goal        
+        """
         return len(state[1]) == 4
         
     def getSuccessors(self, state):
-        
+        """
+        Per trobar els successors, mirarem si l'accio a dur a terme es legal.
+        Si ho es:
+            - Si l'estat al que anem es un corner i no l'hem visitat ja, l'afegim
+                a la llista de corners visitats d'aquest estat
+            - Sino, afegim a la llista de successors una tupla de la forma
+                ((estatSeguent,llistaCornersVisitats),accio,cost)
+        Retornem la llista de successors
+        """
         x,y = state[0]
+        actual = (x,y)
         successors = []
         visitedCorners = list(state[1])
         
@@ -310,17 +328,13 @@ class CornersProblem(search.SearchProblem):
             dx,dy = Actions.directionToVector(action)
             nextx,nexty = int(x+dx),int(y+dy)
             hitsWall = self.walls[nextx][nexty]
+            nextState = (nextx,nexty)
             
             if not hitsWall:
                 
-                nextState = (nextx,nexty)
-                
-                if nextState in self.corners:
-                    if nextState not in visitedCorners:
-#                        print("Appendo l'estat "+str(nextState)+" a successors.")
-#                        print "------------------------------------------------"
-                        visitedCorners.append(nextState)
-                        
+                if actual in self.corners and actual not in visitedCorners:
+                    visitedCorners.append(actual)
+                    
                 successors.append(((nextState,visitedCorners), action, self.cost))
             
         self._expanded += 1 # DO NOT CHANGE
