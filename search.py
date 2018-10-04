@@ -161,12 +161,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     while not statePQueue.isEmpty():
     
         actual = statePQueue.pop()
-                                      
+        
         if(problem.isGoalState(actual[0]) or goal):
             return actual[1]
         
         if actual[0] not in explored:
-            
             for i in problem.getSuccessors(actual[0]):
                 
                 hact = heuristic(i[0],problem)
