@@ -86,52 +86,64 @@ def depthFirstSearch(problem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
     """
-    
+    #Guardem la coordenada inicial del nostre pacman
     estat = problem.getStartState()
-    
+    #creem l'Stack que utilitzarem pel nostre dfs
     stateStack = util.Stack()
-    
+    #creem una llista buida on guardarem les coordenades ja explorades
     explored = []
-    
+    #afegim al nostre Stack la primera posició juntament amb una llista que contindrà
+    #els moviments fets fins aquella posició.
+    #Així, a partir d'ara tractarem els estats com una llista de dos elements formada
+    #per [(coordenada),[llista de moviments fins la coordenada]]
     stateStack.push([estat,[]])
-    
+    #Ara creem un bucle per anar explorant els estats. Degut a que volem fer un dfs,
+    #seguirem el model LIFO (last in, first out) per aconseguir-ho
     while not stateStack.isEmpty():
-    
-        actual = stateStack.pop()
-        
-        if(problem.isGoalState(actual[0])):
-            return actual[1]
-        
-        if actual[0] not in explored:
-            for i in problem.getSuccessors(actual[0]):
-                    stateStack.push([i[0],actual[1]+[i[1]]])
-        
-        explored.append(actual[0])
+    	#Extraiem l'últim estat afegit a l'Stack
+        current = stateStack.pop()
+        #Si aquest és l'objectiu, retornem la llista de moviments que ens han dut a ell.
+        if(problem.isGoalState(current[0])):
+            return current[1]
+        #Comprovem que aquesta coordenada no l'hem explorat ja
+        if current[0] not in explored:
+        	#Si no ha estat explorat, obtenim (si en té) els successors d'aquest i els
+        	#afegim al nostre Stack juntament amb el nou moviment
+            for i in problem.getSuccessors(current[0]):
+                    stateStack.push([i[0],current[1]+[i[1]]])
+        #Afegim la coordenada a explorats
+        explored.append(current[0])
         
 
 def breadthFirstSearch(problem):
-    
+    #Guardem la coordenada inicial del nostre pacman
     estat = problem.getStartState()
-    
+    #creem la cua que utilitzarem pel nostre bfs
     stateQueue = util.Queue()
-    
-    stateQueue.push([estat,[]])
-    
+    #creem una llista buida on guardarem les coordenades ja explorades
     visited = []
-    
+    #afegim a la nostre cua la primera posició juntament amb una llista que contindrà
+    #els moviments fets fins aquella posició.
+    #Així, a partir d'ara tractarem els estats com una llista de dos elements formada
+    #per [(coordenada),[llista de moviments fins la coordenada]]
+    stateQueue.push([estat,[]])
+    #Ara creem un bucle per anar explorant els estats. Degut a que volem fer un bfs,
+    #seguirem el model FIFO (first in, first out) per aconseguir-ho
     while stateQueue:
-        
-        actual, actions = stateQueue.pop()
-        
-        if problem.isGoalState(actual):
-            print("Actions to the goal:\n"+str(actions))
+        #Extraiem el primer estat afegit a la cua. Aquest cop, guardarem per separat
+        #la coordenada (current) i els moviments (actions)
+        current, actions = stateQueue.pop()
+        #Si aquest és l'objectiu, retornem la llista de moviments que ens han dut a ell.
+        if problem.isGoalState(current):
             return actions
-        
-        if actual not in visited:
-            for successor in problem.getSuccessors(actual):
+        #Comprovem que aquesta coordenada no l'hem explorat ja
+        if current not in visited:
+        	#Si no ha estat explorat, obtenim (si en té) els successors d'aquest i els
+        	#afegim al nostre Stack juntament amb el nou moviment
+            for successor in problem.getSuccessors(current):
                 stateQueue.push([successor[0],actions+[successor[1]]])
-                    
-            visited.append(actual)
+            #Afegim la coordenada a explorats        
+            visited.append(current)
 
 def uniformCostSearch(problem):
     
@@ -145,34 +157,37 @@ def nullHeuristic(state, problem=None):
     return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    
+    #Guardem la coordenada inicial del nostre pacman
     estat = problem.getStartState()
-    
+    #Creem la cua prioritària que utilitzarem
     statePQueue = util.PriorityQueue()
-    
+    #Creem una llista buida on afegirem els estats que ja haguem explorat
     explored = []
-    
+    #Guardem la heurística de l'estat actual
     h = heuristic(estat,problem)
-    
+    #En aquest cas, els estats seran una llista de la forma [coordenada,moviments,cost acumulat]
+    #i la prioritat serà h(heurística)+g(cost acumulat).
+    #En el primer push, el cost 'g' és 0.
     statePQueue.push([estat,[],0],h)
     
     goal = False
-    
+    #Ara creem un bucle per anar explorant els estats de manera que el següent estat a explorar
+    #serà el que tingui prioritat més baixa. (per prioritat entenem g+h = cost acumulat+heurística)
     while not statePQueue.isEmpty():
-    
-        actual = statePQueue.pop()
+    	#Extraiem el primer estat
+        current = statePQueue.pop()
+        #Si la coordenada 
+        if(problem.isGoalState(current[0]) or goal):
+            return current[1]
         
-        if(problem.isGoalState(actual[0]) or goal):
-            return actual[1]
-        
-        if actual[0] not in explored:
-            for i in problem.getSuccessors(actual[0]):
+        if current[0] not in explored:
+            for i in problem.getSuccessors(current[0]):
                 
                 hact = heuristic(i[0],problem)
-                g = actual[2]+i[2]
-                statePQueue.push([i[0],actual[1]+[i[1]],g],hact+g)
+                g = current[2]+i[2]
+                statePQueue.push([i[0],current[1]+[i[1]],g],hact+g)
         
-        explored.append(actual[0])
+        explored.append(current[0])
         
 
 # Abbreviations
