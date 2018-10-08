@@ -176,17 +176,19 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     while not statePQueue.isEmpty():
     	#Extraiem el primer estat
         current = statePQueue.pop()
-        #Si la coordenada 
+        #Si la coordenada es goal (en el cas dels corners dins de current[0] tambe hi haura una llista
+        #de corners visitats) retorna el camí.
         if(problem.isGoalState(current[0]) or goal):
             return current[1]
-        
+        #Comprovem no haver explorat l'estat
         if current[0] not in explored:
+        	#Afegim cada successor que hagi amb la seva heuristica i cost acumulat
             for i in problem.getSuccessors(current[0]):
                 
                 hact = heuristic(i[0],problem)
                 g = current[2]+i[2]
                 statePQueue.push([i[0],current[1]+[i[1]],g],hact+g)
-        
+        #Afegim l'estat a la llista d'explorats
         explored.append(current[0])
         
 
